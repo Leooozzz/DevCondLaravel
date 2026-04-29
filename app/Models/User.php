@@ -18,18 +18,12 @@ class User extends Authenticatable implements JWTSubject
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    public $timestamps = false;
+
+    protected $hidden = [
+        'password'
+    ];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
