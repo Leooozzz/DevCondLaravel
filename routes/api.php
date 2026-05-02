@@ -21,8 +21,8 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 
 Route::middleware('auth:api')->group(function () {
 
-  Route::post('/auht/validate', [AuthController::class, 'valideteToken']);
-  Route::post('/auht/logout', [AuthController::class, 'logout']);
+  Route::post('/auth/validate', [AuthController::class, 'valideteToken']);
+  Route::post('/auth/logout', [AuthController::class, 'logout']);
   //Notice walls
   Route::get('/walls', [WallController::class, 'getAll']);
   Route::post('/wall/{id}/like', [WallController::class, 'like']);
