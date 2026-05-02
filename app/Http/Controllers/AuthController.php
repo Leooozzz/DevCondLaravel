@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+
+    //Unauthorized function ->name('login')
     public function unauthorized()
     {
         return response()->json([
@@ -18,6 +20,7 @@ class AuthController extends Controller
         ], 401);
     }
 
+    //Register function()
     public function register(Request $request)
     {
         $array = ['error' => ''];
@@ -35,36 +38,67 @@ class AuthController extends Controller
             $cpf = $request->input('cpf');
             $password = $request->input('password');
 
+            $newUser = new User();
+            $newUser->name = $name;
+            $newUser->email = $email;
+            $newUser->cpf = $cpf;
+            $newUser->password = Hash::make($password);;
+            $newUser->save();
 
-          
+            $token = auth()->attempt([
+                'cpf' => $cpf,
+                'password' => $password
+            ]);
+            if (!$token) {
+                $array['error'] = 'User or invalid password';
+                return $array;
+            }
+            $array['token'] = $token;
 
-                $newUser = new User();
-                $newUser->name = $name;
-                $newUser->email = $email;
-                $newUser->cpf = $cpf;
-                $newUser->password = Hash::make($password);;
-                $newUser->save();
+            $user = auth()->user();
+            $array['user'] = $user;
 
-                $token = auth()->attempt([
-                    'cpf' => $cpf,
-                    'password' => $password
-                ]);
-                if (!$token) {
-                    $array['error'] = 'User or invalid password';
-                    return $array;
-                }
-                $array['token'] = $token;
-
-                $user = auth()->user();
-                $array['user'] = $user;
-
-                $properties = Unit::select(['id','name'])->where('id_owner', $user['id'])->get();
-                $array['user']['properties']=$properties;
+            $properties = Unit::select(['id', 'name'])->where('id_owner', $user['id'])->get();
+            $array['user']['properties'] = $properties;
         } else {
             $array['error'] = $validator->errors()->first();
             return $array;
         }
+        return $array;
+    }
 
+    //Login function()
+    public function login(Request $request)
+    {
+        $array = ['error' => ''];
+
+        $validator = Validator::make($request->all(), [
+            'cpf' => 'required|digits:11',
+            'password' => 'required'
+        ]);
+        if (!$validator->fails()) {
+            $cpf = $request->input('cpf');
+            $password = $request->input('password');
+
+            $token = auth()->attempt([
+                'cpf' => $cpf,
+                'password' => $password
+            ]);
+            if (!$token) {
+                $array['error'] = 'Cpf or invalid password';
+                return $array;
+            }
+            $array['token'] = $token;
+
+            $user = auth()->user();
+            $array['user'] = $user;
+
+            $properties = Unit::select(['id', 'name'])->where('id_owner', $user['id'])->get();
+            $array['user']['properties'] = $properties;
+        } else {
+            $array['error'] = $validator->errors()->first();
+            return $array;
+        }
         return $array;
     }
 }
