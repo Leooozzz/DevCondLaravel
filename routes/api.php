@@ -23,17 +23,22 @@ Route::middleware('auth:api')->group(function () {
 
   Route::post('/auth/validate', [AuthController::class, 'valideteToken']);
   Route::post('/auth/logout', [AuthController::class, 'logout']);
+  
   //Notice walls
   Route::get('/walls', [WallController::class, 'getAll']);
   Route::post('/wall/{id}/like', [WallController::class, 'like']);
+
   //Docs
   Route::get('/docs', [DocController::class, 'getAll']);
+
   //Occurrence book
   Route::get('/warnings', [WarningController::class, 'getMyWarnings']);
   Route::post('/warnings', [WarningController::class, 'setWarning']);
   Route::post('/warning/file', [WarningController::class, 'addWarningFile']);
+
   //Billets
   Route::get('/billets', [BilletController::class, 'getAll']);
+  
   //Found and lost
   Route::get('/foundandlost', [FoundAndLostController::class, 'getAll']);
   Route::post('/foundandlost', [FoundAndLostController::class, 'insert']);
@@ -47,6 +52,7 @@ Route::middleware('auth:api')->group(function () {
   Route::delete('/unit/{id}/removeperson', [UnitController::class, 'removePerson']);
   Route::delete('/unit/{id}/removevehicle', [UnitController::class, 'removeVehicle']);
   Route::delete('/unit/{id}/removepet', [UnitController::class, 'removePet']);
+
   //Reservations
   Route::get('/reservations', [ReservationController::class, 'getReservation']);
   Route::get('/myreservation', [ReservationController::class, 'myReservation']);
