@@ -55,11 +55,11 @@ Route::middleware('auth:api')->group(function () {
 
   //Reservations
   Route::get('/reservations', [ReservationController::class, 'getReservation']);
-  Route::get('/myreservation', [ReservationController::class, 'myReservation']);
+  Route::post('/reservations/{id}', [ReservationController::class, 'setReservation']);
 
   Route::get('/reservation/{id}/disabledates', [ReservationController::class, 'getDisableDates']);
   Route::get('/reservation/{id}/time', [ReservationController::class, 'getTimes']);
 
+  Route::get('/myreservation/{id}', [ReservationController::class, 'getMyReservation']);
   Route::delete('/myreservation/{id}', [ReservationController::class, 'delMyReservation']);
-  Route::post('/reservation/{id}', [ReservationController::class, 'delMyReservation']);
 });
